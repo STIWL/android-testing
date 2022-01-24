@@ -1,4 +1,4 @@
-package com.luisansal.jetpack.components
+package com.luisansal.jetpack.core.components
 
 import android.content.Context
 import android.os.Bundle

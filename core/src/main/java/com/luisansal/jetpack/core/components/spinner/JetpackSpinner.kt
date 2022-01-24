@@ -1,12 +1,14 @@
-package com.luisansal.jetpack.components.spinner
+package com.luisansal.jetpack.core.components.spinner
 
 import android.content.Context
 import android.util.AttributeSet
+import android.view.LayoutInflater
 import android.view.View
 import android.widget.AdapterView
 import androidx.constraintlayout.widget.ConstraintLayout
-import com.luisansal.jetpack.R
-import kotlinx.android.synthetic.main.jetpack_spinner.view.*
+import pe.com.luisansal.core.R
+import pe.com.luisansal.core.databinding.JetpackSearchviewBinding
+import pe.com.luisansal.core.databinding.JetpackSpinnerBinding
 
 class JetpackSpinner(context: Context, attrs: AttributeSet?) : ConstraintLayout(context, attrs) {
     companion object {
@@ -19,23 +21,29 @@ class JetpackSpinner(context: Context, attrs: AttributeSet?) : ConstraintLayout(
         Adapter(context, R.layout.support_simple_spinner_dropdown_item)
     }
 
-    init {
-        inflate(context, R.layout.jetpack_spinner, this)
+    val binding by lazy {
+        JetpackSpinnerBinding.inflate(LayoutInflater.from(context), this, true)
+    }
 
-        spJetpack?.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onNothingSelected(p0: AdapterView<*>?) = Unit
-            override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
-                if (spJetpack?.tag != SELECTED) {
-                    val model = adapter.getItem(p2) as Model
-                    if (model.key != EMPTY_KEY) {
-                        onItemSelectedListener?.invoke(model)
-                        selected = model
+    init {
+        if(isInEditMode) {
+            inflate(context, R.layout.jetpack_spinner, this)
+        } else {
+            binding.spJetpack?.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+                override fun onNothingSelected(p0: AdapterView<*>?) = Unit
+                override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
+                    if (binding.spJetpack?.tag != SELECTED) {
+                        val model = adapter.getItem(p2) as Model
+                        if (model.key != EMPTY_KEY) {
+                            onItemSelectedListener?.invoke(model)
+                            selected = model
+                        }
                     }
+                    binding.spJetpack?.tag = UNSELECTED
                 }
-                spJetpack?.tag = UNSELECTED
             }
+            invalidateView()
         }
-        invalidateView()
     }
 
     var onItemSelectedListener: ((Model) -> Unit)? = null
@@ -46,8 +54,8 @@ class JetpackSpinner(context: Context, attrs: AttributeSet?) : ConstraintLayout(
 
     fun select(model: Model) {
         val index = setupAdapter.indexOf(model)
-        spJetpack?.tag = SELECTED
-        spJetpack?.setSelection(index)
+        binding.spJetpack?.tag = SELECTED
+        binding.spJetpack?.setSelection(index)
         invalidateView()
     }
 
@@ -62,8 +70,8 @@ class JetpackSpinner(context: Context, attrs: AttributeSet?) : ConstraintLayout(
             }
         }
         if (index != -1) {
-            spJetpack?.tag = SELECTED
-            spJetpack?.setSelection(index)
+            binding.spJetpack?.tag = SELECTED
+            binding.spJetpack?.setSelection(index)
         }
         invalidateView()
     }
@@ -75,10 +83,10 @@ class JetpackSpinner(context: Context, attrs: AttributeSet?) : ConstraintLayout(
                 data.add(Model(EMPTY_KEY, hint))
             }
             adapter.dataSet = data
-            spJetpack?.adapter = adapter
+            binding.spJetpack?.adapter = adapter
 
             if (value.isNotEmpty()) {
-                spJetpack?.setSelection(data.size - 1)
+                binding.spJetpack?.setSelection(data.size - 1)
             }
             field = data
             invalidateView()

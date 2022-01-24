@@ -1,4 +1,4 @@
-package com.luisansal.jetpack.components.edittext
+package com.luisansal.jetpack.core.components.edittext
 
 import androidx.databinding.BindingAdapter
 import androidx.databinding.InverseBindingAdapter

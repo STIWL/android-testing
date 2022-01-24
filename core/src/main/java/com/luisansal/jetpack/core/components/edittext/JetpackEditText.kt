@@ -1,4 +1,4 @@
-package com.luisansal.jetpack.components.edittext
+package com.luisansal.jetpack.core.components.edittext
 
 import android.content.Context
 import android.text.InputFilter
@@ -10,12 +10,10 @@ import android.view.inputmethod.EditorInfo
 import androidx.annotation.StringRes
 import androidx.core.content.ContextCompat
 import androidx.core.widget.addTextChangedListener
-import com.luisansal.jetpack.R
-import com.luisansal.jetpack.components.ConstraintSavedInstanceLayout
+import com.luisansal.jetpack.core.components.ConstraintSavedInstanceLayout
 import com.luisansal.jetpack.core.utils.afterTextChanged
-import com.luisansal.jetpack.databinding.JetpackEdittextBinding
-import kotlinx.android.synthetic.main.jetpack_edittext.view.*
-import kotlinx.android.synthetic.main.layout_error_success.view.*
+import pe.com.luisansal.core.R
+import pe.com.luisansal.core.databinding.JetpackEdittextBinding
 
 
 class JetpackEditText(context: Context, attrs: AttributeSet?) : ConstraintSavedInstanceLayout(context, attrs) {
@@ -26,7 +24,7 @@ class JetpackEditText(context: Context, attrs: AttributeSet?) : ConstraintSavedI
     var validated: Boolean = false
         set(value) {
             field = value
-            etForm?.tag = PRESSED
+            binding.etForm?.tag = PRESSED
             if (value)
                 setValidateSuccess()
             else
@@ -64,13 +62,13 @@ class JetpackEditText(context: Context, attrs: AttributeSet?) : ConstraintSavedI
     var filters: Array<InputFilter> = arrayOf()
         set(value) {
             field = value
-            etForm?.filters = value
+            binding.etForm?.filters = value
             invalidateView()
         }
     var isEnable: Boolean = true
         set(value) {
             field = value
-            etForm?.isEnabled = value
+            binding.etForm?.isEnabled = value
             invalidateView()
         }
     var inputType: Int = 0
@@ -92,8 +90,8 @@ class JetpackEditText(context: Context, attrs: AttributeSet?) : ConstraintSavedI
     private fun setValidateSuccess() {
         doETSuccess()
         _infoSuccess?.let {
-            tvSuccess?.text = it
-            tvSuccess?.visibility = View.VISIBLE
+            binding.tvErrorSuccess.tvSuccess?.text = it
+            binding.tvErrorSuccess.tvSuccess?.visibility = View.VISIBLE
         }
         invalidateView()
     }
@@ -101,23 +99,23 @@ class JetpackEditText(context: Context, attrs: AttributeSet?) : ConstraintSavedI
     private fun setValidateError() {
         doETError()
         _infoError?.let {
-            tvError?.text = it
+            binding.tvErrorSuccess.tvError?.text = it
         }
         invalidateView()
     }
 
     private fun doETSuccess() {
-        etForm?.background = ContextCompat.getDrawable(context, R.drawable.ic_shape_rectangle_input_success)
-        etForm?.setTextColor(ContextCompat.getColor(context, R.color.success))
-        tvSuccess?.visibility = View.GONE
-        tvError?.visibility = View.GONE
+        binding.etForm?.background = ContextCompat.getDrawable(context, R.drawable.ic_shape_rectangle_input_success)
+        binding.etForm?.setTextColor(ContextCompat.getColor(context, R.color.success))
+        binding.tvErrorSuccess.tvSuccess?.visibility = View.GONE
+        binding.tvErrorSuccess.tvError?.visibility = View.GONE
     }
 
     private fun doETError() {
-        etForm?.background = ContextCompat.getDrawable(context, R.drawable.ic_shape_rectangle_input_error)
-        etForm?.setTextColor(ContextCompat.getColor(context, R.color.error))
-        tvError?.visibility = View.VISIBLE
-        tvSuccess.visibility = View.GONE
+        binding.etForm?.background = ContextCompat.getDrawable(context, R.drawable.ic_shape_rectangle_input_error)
+        binding.etForm?.setTextColor(ContextCompat.getColor(context, R.color.error))
+        binding.tvErrorSuccess.tvError?.visibility = View.VISIBLE
+        binding.tvErrorSuccess.tvSuccess.visibility = View.GONE
     }
 
     private val binding by lazy {
@@ -137,17 +135,17 @@ class JetpackEditText(context: Context, attrs: AttributeSet?) : ConstraintSavedI
                 try {
 
                     binding.hint = getString(R.styleable.JetpackEditText_android_hint)
-                    etForm?.inputType = getInt(R.styleable.JetpackEditText_android_inputType, InputType.TYPE_CLASS_TEXT)
+                    binding.etForm?.inputType = getInt(R.styleable.JetpackEditText_android_inputType, InputType.TYPE_CLASS_TEXT)
                     val textDefault: String? = getString(R.styleable.JetpackEditText_android_text)
                     binding.text = textDefault
-                    etForm?.nextFocusDownId = getInt(R.styleable.JetpackEditText_android_nextFocusDown, View.NO_ID)
-                    etForm?.nextFocusRightId = getInt(R.styleable.JetpackEditText_android_nextFocusRight, View.NO_ID)
-                    etForm?.maxLines = getInt(R.styleable.JetpackEditText_android_maxLines, 1)
-                    etForm?.imeOptions = getInt(R.styleable.JetpackEditText_android_imeOptions, EditorInfo.IME_NULL)
-                    etForm?.isEnabled = getBoolean(R.styleable.JetpackEditText_android_enabled, true)
+                    binding.etForm?.nextFocusDownId = getInt(R.styleable.JetpackEditText_android_nextFocusDown, View.NO_ID)
+                    binding.etForm?.nextFocusRightId = getInt(R.styleable.JetpackEditText_android_nextFocusRight, View.NO_ID)
+                    binding.etForm?.maxLines = getInt(R.styleable.JetpackEditText_android_maxLines, 1)
+                    binding.etForm?.imeOptions = getInt(R.styleable.JetpackEditText_android_imeOptions, EditorInfo.IME_NULL)
+                    binding.etForm?.isEnabled = getBoolean(R.styleable.JetpackEditText_android_enabled, true)
                     _infoSuccess = getString(R.styleable.JetpackEditText_infoSuccess)
                     _infoError = getString(R.styleable.JetpackEditText_infoError)
-                    etForm?.filters = arrayOf(
+                    binding.etForm?.filters = arrayOf(
                         InputFilter.LengthFilter(
                             getInt(
                                 R.styleable.JetpackEditText_android_maxLength,
@@ -160,11 +158,11 @@ class JetpackEditText(context: Context, attrs: AttributeSet?) : ConstraintSavedI
                 }
             }
 
-            etForm?.addTextChangedListener {
-                val string = if (it.toString().isEmpty() && etForm.tag != PRESSED) null else it.toString()
+            binding.etForm?.addTextChangedListener {
+                val string = if (it.toString().isEmpty() && binding.etForm.tag != PRESSED) null else it.toString()
                 onTextChangeListener?.invoke(string)
             }
-            etForm?.afterTextChanged {
+            binding.etForm?.afterTextChanged {
                 afterTextChangeListener?.invoke(it)
             }
             invalidateView()

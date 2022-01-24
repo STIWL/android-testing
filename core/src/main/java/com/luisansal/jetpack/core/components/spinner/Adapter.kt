@@ -1,4 +1,4 @@
-package com.luisansal.jetpack.components.spinner
+package com.luisansal.jetpack.core.components.spinner
 
 import android.content.Context
 import android.view.View
@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.TextView
 import androidx.core.content.ContextCompat
-import com.luisansal.jetpack.R
+import pe.com.luisansal.core.R
 
 class Adapter(
     context: Context,

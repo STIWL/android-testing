@@ -1,4 +1,4 @@
-package com.luisansal.jetpack.components
+package com.luisansal.jetpack.core.components
 
 import android.content.Context
 import android.graphics.drawable.Drawable
@@ -7,7 +7,7 @@ import android.view.MotionEvent
 import androidx.core.content.ContextCompat
 import androidx.core.widget.addTextChangedListener
 import androidx.appcompat.widget.AppCompatAutoCompleteTextView
-import com.luisansal.jetpack.R
+import pe.com.luisansal.core.R
 
 class JetpackAutocompleteTextView : AppCompatAutoCompleteTextView {
     constructor(context: Context, attrs: AttributeSet) : super(context, attrs)
