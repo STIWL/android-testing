@@ -7,7 +7,7 @@
             android:id="@+id/fragmentMultimedia"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:name="com.luisansal.jetpack.features.maps.MapsFragment"
+            android:name="com.luisansal.jetpack.features.maps.MapsFirebaseFragment"
             />
 
         <include

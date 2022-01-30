@@ -2,14 +2,13 @@ package com.luisansal.jetpack.features.manageusers.listuser
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.paging.PagedList
 import androidx.paging.PagedListAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.luisansal.jetpack.databinding.ItemUserListBinding
-import com.luisansal.jetpack.core.domain.entity.User
+import com.luisansal.jetpack.core.domain.entity.UserEntity
 
-class PagedUserAdapter : PagedListAdapter<User, PagedUserAdapter.PagingUserViewHolder>(DIFF_CALLBACK) {
+class PagedUserAdapter : PagedListAdapter<UserEntity, PagedUserAdapter.PagingUserViewHolder>(DIFF_CALLBACK) {
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PagingUserViewHolder {
@@ -23,7 +22,7 @@ class PagedUserAdapter : PagedListAdapter<User, PagedUserAdapter.PagingUserViewH
     }
 
     inner class PagingUserViewHolder(private val binding: ItemUserListBinding) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(model: User) = with(binding) {
+        fun bind(model: UserEntity) = with(binding) {
             tvName.text = "${model.names} ${model.lastNames}"
             tvDni.text = model.dni
         }
@@ -31,16 +30,16 @@ class PagedUserAdapter : PagedListAdapter<User, PagedUserAdapter.PagingUserViewH
 
     companion object {
 
-        private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<User>() {
+        private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<UserEntity>() {
             // Concert details may have changed if reloaded from the database,
             // but ID is fixed.
-            override fun areItemsTheSame(oldConcert: User, newConcert: User): Boolean {
+            override fun areItemsTheSame(oldConcert: UserEntity, newConcert: UserEntity): Boolean {
                 return oldConcert.id == newConcert.id
             }
 
             override fun areContentsTheSame(
-                oldConcert: User,
-                newConcert: User
+                oldConcert: UserEntity,
+                newConcert: UserEntity
             ): Boolean {
                 return oldConcert == newConcert
             }

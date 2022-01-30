@@ -2,7 +2,7 @@ package com.luisansal.jetpack.data.preferences
 
 import android.content.SharedPreferences
 import com.google.gson.Gson
-import com.luisansal.jetpack.core.domain.entity.User
+import com.luisansal.jetpack.core.domain.entity.UserEntity
 import com.luisansal.jetpack.core.utils.getString
 import com.luisansal.jetpack.core.utils.putLong
 import com.luisansal.jetpack.core.utils.getLong
@@ -18,8 +18,8 @@ class UserSharedPreferences(private val preferences: SharedPreferences) {
         const val KEY_TIME_TO_COUNTDOWN = "KEY_TIME_TO_COUNTDOWN"
     }
 
-    var user: User?
-        get() = Gson().fromJson(preferences.getString(KEY_USER), User::class.java)
+    var userEntity: UserEntity?
+        get() = Gson().fromJson(preferences.getString(KEY_USER), UserEntity::class.java)
         set(value) = preferences.putString(KEY_USER, Gson().toJson(value))
 
     var countDownStartTime: Long

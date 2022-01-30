@@ -1,13 +1,13 @@
 package com.luisansal.jetpack.domain.entity
 
-import com.luisansal.jetpack.core.domain.entity.User
+import com.luisansal.jetpack.core.domain.entity.UserEntity
 import java.util.Date
 
 abstract class Auditory {
 
-    var createdBy: User? = null
+    var createdBy: UserEntity? = null
 
-    var modifiedBy: User? = null
+    var modifiedBy: UserEntity? = null
 
     var dateCreated = Date()
 

@@ -4,7 +4,7 @@ import com.luisansal.jetpack.features.manageusers.validation.UserValidation
 import org.amshove.kluent.shouldBe
 import org.junit.Test
 
-class UserValidationTest {
+class UserDaoValidationTest {
 
     @Test
     fun `Cantidad de digitos de Dni válidl`(){

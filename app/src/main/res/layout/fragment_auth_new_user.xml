@@ -26,12 +26,37 @@
             android:inputType="textEmailAddress"/>
 
         <androidx.appcompat.widget.AppCompatEditText
-            android:id="@+id/etPassword"
+            android:id="@+id/etNames"
+            style="@style/Widget.Form.EditText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/ds_margin_small"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/etEmail"
-            android:hint="Password"
+            android:layout_marginTop="@dimen/ds_margin_medium"
+            android:text="@={viewModel.names}"
+            android:hint="Nombres"
+            android:inputType="textEmailAddress"/>
+
+        <androidx.appcompat.widget.AppCompatEditText
+            android:id="@+id/etLastnames"
+            style="@style/Widget.Form.EditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/etNames"
+            android:layout_marginTop="@dimen/ds_margin_medium"
+            android:text="@={viewModel.lastNames}"
+            android:hint="Apellidos"
+            android:inputType="textEmailAddress"/>
+
+        <androidx.appcompat.widget.AppCompatEditText
+            android:id="@+id/etPassword"
+            style="@style/Widget.Form.EditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/ds_margin_medium"
+            app:layout_constraintTop_toBottomOf="@id/etLastnames"
+            android:hint="Contraseña"
             android:text="@={viewModel.password}"
             android:inputType="textPassword"/>
 

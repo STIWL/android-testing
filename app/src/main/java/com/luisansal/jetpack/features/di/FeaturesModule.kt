@@ -22,7 +22,7 @@ internal val featuresModule = module {
     viewModel { params -> com.luisansal.jetpack.features.manageusers.newuser.NewUserViewModel(params[0]) }
     factory { params -> ViewPagerPresenter(params[0], params[0]) }
     viewModel { UserViewModel(get(), get()) }
-    viewModel { MapsViewModel(get(), get(), get()) }
+    viewModel { MapsViewModel(get(), get(), get(), get()) }
     viewModel { PopulateViewModel(get()) }
     viewModel { MultimediaViewModel(get()) }
     viewModel { LoginViewModel(get()) }

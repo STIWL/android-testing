@@ -2,7 +2,7 @@ package com.luisansal.jetpack.features.manageusers.viewmodel
 
 import androidx.lifecycle.MutableLiveData
 import com.luisansal.jetpack.core.base.BaseViewModel
-import com.luisansal.jetpack.core.domain.entity.User
+import com.luisansal.jetpack.core.domain.entity.UserEntity
 import com.luisansal.jetpack.core.domain.exceptions.CreateUserValidationException
 import com.luisansal.jetpack.core.domain.exceptions.DniValidationException
 import com.luisansal.jetpack.core.domain.exceptions.UserExistException
@@ -23,29 +23,29 @@ class UserViewModel(
     val userViewState = MutableLiveData<UserViewState>()
 
     companion object {
-        var user: User? = null
+        var userEntity: UserEntity? = null
     }
 
-    val user = MutableLiveData<User>()
+    val user = MutableLiveData<UserEntity>()
 
-    fun newUser(user: User) {
-        if (!UserValidation.validateDni(user.dni)) {
+    fun newUser(userEntity: UserEntity) {
+        if (!UserValidation.validateDni(userEntity.dni)) {
             errorDialog.postValue(DniValidationException())
         }
 
         uiScope.launch {
-            val userExist = userUseCase.getUser(user.dni)
+            val userExist = userUseCase.getUser(userEntity.dni)
             if (userExist !== null) {
                 errorDialog.postValue(UserExistException(userExist))
             }
 
-            if (!UserValidation.validateUserToCreate(user)) {
+            if (!UserValidation.validateUserToCreate(userEntity)) {
                 errorDialog.postValue(CreateUserValidationException())
             }
 
             try {
-                userUseCase.newUser(user)
-                userViewState.postValue(UserViewState.NewUserSuccess(user))
+                userUseCase.newUser(userEntity)
+                userViewState.postValue(UserViewState.NewUserSuccess(userEntity))
             } catch (e: Exception) {
                 errorDialog.postValue(e)
             }
@@ -101,7 +101,7 @@ class UserViewModel(
 
         uiScope.launch {
             try {
-                userViewState.postValue(UserViewState.GetUserSuccessState(userUseCase.getUser(dni)))
+                userViewState.postValue(UserViewState.GetUserSuccessState(userUseCase.getUserByDni(dni)))
 
             } catch (e: Exception) {
                 userViewState.postValue(UserViewState.ErrorState(e))

@@ -1,6 +1,7 @@
 package com.luisansal.jetpack.core.data.preferences
 
 import android.content.SharedPreferences
+import androidx.core.content.edit
 import com.luisansal.jetpack.core.utils.*
 
 class AuthSharedPreferences(private val preferences: SharedPreferences) {
@@ -23,6 +24,8 @@ class AuthSharedPreferences(private val preferences: SharedPreferences) {
         const val KEY_IS_LOGGED = "is_logged"
 
         const val KEY_USERNAME = "username"
+        const val KEY_NAME = "KEY_NAME"
+        const val KEY_LASTNAME = "KEY_LASTNAME"
         const val KEY_PASSWORD = "password"
 
     }
@@ -46,6 +49,18 @@ class AuthSharedPreferences(private val preferences: SharedPreferences) {
     var tokenExpires: Long
         get() = preferences.getLong(KEY_TOKEN_EXPIRES)
         set(value) = preferences.putLong(KEY_TOKEN_EXPIRES, value)
+
+    var email: String?
+        get() = preferences.getString(KEY_USERNAME)
+        set(value) = preferences.putString(KEY_USERNAME, value)
+
+    var names: String?
+        get() = preferences.getString(KEY_NAME)
+        set(value) = preferences.putString(KEY_NAME, value)
+
+    var lastnames: String?
+        get() = preferences.getString(KEY_LASTNAME)
+        set(value) = preferences.putString(KEY_LASTNAME, value)
 
     var username: String?
         get() = preferences.getString(KEY_USERNAME)

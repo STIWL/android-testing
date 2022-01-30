@@ -5,7 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.paging.PagedList
 import com.luisansal.jetpack.base.TestCoroutineRule
-import com.luisansal.jetpack.core.domain.entity.User
+import com.luisansal.jetpack.core.domain.entity.UserEntity
 import com.luisansal.jetpack.domain.usecases.UserUseCase
 import com.luisansal.jetpack.features.manageusers.viewmodel.UserViewModel
 import com.luisansal.jetpack.utils.mockPagedList
@@ -70,7 +70,7 @@ class ManageUsersViewModelTest {
     @Test
     fun `listar usuarios paginados`() = runBlockingTest {
         val users = UsersMockDataHelper().getUsers().mockPagedList()
-        val liveDataUsers = MutableLiveData<PagedList<User>>()
+        val liveDataUsers = MutableLiveData<PagedList<UserEntity>>()
         liveDataUsers.postValue(users)
 
         coEvery { userUseCae.getAllUserPaged() } returns liveDataUsers

@@ -49,36 +49,36 @@
             android:name=".features.main.MainActivity"
             android:label="@string/title_activity_main"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar"
+            android:theme="@style/JetpackAppTheme"
             android:windowSoftInputMode="adjustPan|stateAlwaysHidden" />
         <activity
             android:name=".features.maps.MapsActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/JetpackAppTheme" />
         <activity
             android:name=".features.viewpager.ViewPagerActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/JetpackAppTheme" />
         <activity
             android:name=".features.manageusers.RoomActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/JetpackAppTheme" />
         <activity
             android:name=".features.maps.MainMapsActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/JetpackAppTheme" />
         <activity
             android:name=".features.multimedia.MultimediaActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/JetpackAppTheme" />
         <activity
             android:name=".features.chat.ChatActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/JetpackAppTheme" />
         <activity
             android:name=".features.design.DesignActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/JetpackAppTheme" />
         <activity
             android:name=".features.onboarding.OnboardingActivity"
             android:screenOrientation="portrait"
@@ -90,21 +90,21 @@
         <activity
             android:name=".features.viewbinding.ViewBindingActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/JetpackAppTheme" />
         <activity
             android:name=".features.workmanager.WorkManagerActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/JetpackAppTheme" />
         <activity
             android:name=".features.sales.products.ProductActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/JetpackAppTheme" />
         <activity
             android:name=".features.menu.MenuActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/JetpackAppTheme" />
         <activity
-            android:name=".features.auth.LoginActivity"
+            android:name=".features.miniUber.auth.AuthActivity"
             android:theme="@style/JetpackAppTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

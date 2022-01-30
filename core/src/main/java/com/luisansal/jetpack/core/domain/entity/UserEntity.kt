@@ -1,15 +1,14 @@
 package com.luisansal.jetpack.core.domain.entity
 
-
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
 @Entity(tableName = "tbluser")
-class User(
-        @PrimaryKey(autoGenerate = true)
+class UserEntity(
+        @PrimaryKey(autoGenerate = false)
         @ColumnInfo(name = "id")
-        var id: Long = 0,
+        var id: String = "",
         var dni: String = "",
         var names: String = "",
         var lastNames: String = "",
@@ -20,5 +19,6 @@ class User(
         var emailVerifiedAt: Long = 0,
         var filePath: String? = null,
         var createdAt: Long = 0,
-        var updatedAt: Long? = null
+        var updatedAt: Long? = null,
+        val password : String = ""
 )

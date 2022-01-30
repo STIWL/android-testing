@@ -21,20 +21,22 @@
             android:padding="@dimen/ds_padding_xsmall">
             <com.luisansal.jetpack.core.components.JetpackAutocompleteTextView
                 android:id="@+id/acBuscarVisitas"
-                android:inputType="number"
+                android:inputType="textEmailAddress"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:hint="Buscar por DNI"
+                android:hint="Buscar por email"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                android:text="@={viewModel.dni}"/>
+                app:layout_constraintWidth_percent="0.6"
+                android:text="@={viewModel.email}"/>
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnMostrarVisitas"
                 style="@style/Widget.Button"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:text="Mostrar visitas"
+                app:layout_constraintWidth_percent="0.35"
                 app:layout_constraintStart_toEndOf="@id/acBuscarVisitas"
                 android:layout_marginStart="@dimen/ds_margin_small_plus"
                 app:layout_constraintTop_toTopOf="parent"

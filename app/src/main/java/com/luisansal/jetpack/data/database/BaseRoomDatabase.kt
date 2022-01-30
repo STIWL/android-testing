@@ -2,21 +2,22 @@ package com.luisansal.jetpack.data.database
 
 import android.content.Context
 import android.os.AsyncTask
-import com.luisansal.jetpack.domain.dao.UserDao
-import com.luisansal.jetpack.domain.dao.UserVisitJoinDao
-import com.luisansal.jetpack.domain.dao.VisitDao
-import com.luisansal.jetpack.core.domain.entity.User
-import com.luisansal.jetpack.domain.entity.Visit
+import com.luisansal.jetpack.domain.localdao.UserDao
+import com.luisansal.jetpack.domain.localdao.UserVisitJoinDao
+import com.luisansal.jetpack.domain.localdao.VisitDao
+import com.luisansal.jetpack.core.domain.entity.UserEntity
+import com.luisansal.jetpack.domain.entity.VisitEntity
 import com.luisansal.jetpack.domain.converter.LatLngConverter
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import androidx.sqlite.db.SupportSQLiteDatabase
+import com.luisansal.jetpack.domain.converter.OwnLatLngConverter
 import com.luisansal.jetpack.domain.entity.UserVisitJoin
 
-@Database(entities = [User::class, Visit::class, UserVisitJoin::class], version = 7)
-@TypeConverters(LatLngConverter::class)
+@Database(entities = [UserEntity::class, VisitEntity::class, UserVisitJoin::class], version = 9)
+@TypeConverters(LatLngConverter::class,OwnLatLngConverter::class)
 abstract class BaseRoomDatabase : RoomDatabase() {
 
     var isTest = false

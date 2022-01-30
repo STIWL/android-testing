@@ -1,6 +1,6 @@
-package com.luisansal.jetpack.domain.dao
+package com.luisansal.jetpack.domain.localdao
 
-import com.luisansal.jetpack.domain.entity.Visit
+import com.luisansal.jetpack.domain.entity.VisitEntity
 
 import androidx.lifecycle.LiveData
 import androidx.room.Dao
@@ -11,11 +11,11 @@ import androidx.room.Query
 @Dao
 interface VisitDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun save(visit: Visit) : Long
+    fun save(visitEntity: VisitEntity) : Long
 
     @Query("DELETE FROM tblvisit")
     fun deleteAll()
 
     @Query("SELECT * from tblvisit where id = :id")
-    fun findOneById(id: Long?): LiveData<Visit>
+    fun findOneById(id: Long?): LiveData<VisitEntity>
 }

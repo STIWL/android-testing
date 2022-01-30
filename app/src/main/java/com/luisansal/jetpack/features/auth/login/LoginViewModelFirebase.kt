@@ -23,7 +23,7 @@ class LoginViewModelFirebase(private val activity: Activity, private val loginUs
     private val _loginResult = MutableLiveData<LoginResult?>()
     val loginResult: LiveData<LoginResult?> = _loginResult
 
-    var email = "luis@gmail.com"
+    var email = "johndoe@gmail.com"
     var password = "123456"
 
     fun onClickNewUser() {
@@ -36,7 +36,7 @@ class LoginViewModelFirebase(private val activity: Activity, private val loginUs
         showLoading.value = true
         uiScope.launch {
             loginUseCase.login(activity, email, password, {
-                _loginResult.postValue(LoginResult(success = LoggedInUserView(it?.displayName ?: String.EMPTY)))
+                _loginResult.postValue(LoginResult(success = LoggedInUserView(it?.names ?: String.EMPTY)))
                 showLoading.value = false
             }) {
                 _loginResult.postValue(LoginResult(error = R.string.email_or_username_incorrect))

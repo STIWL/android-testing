@@ -29,6 +29,7 @@ import com.google.android.gms.maps.model.*
 import com.luisansal.jetpack.R
 import com.luisansal.jetpack.core.base.BaseBindingFragment
 import com.luisansal.jetpack.core.data.preferences.AuthSharedPreferences
+import com.luisansal.jetpack.core.domain.entity.UserEntity
 import com.luisansal.jetpack.core.domain.exceptions.RequestPlacesDeniedException
 import com.luisansal.jetpack.core.utils.bitmapDescriptorFromVector
 import com.luisansal.jetpack.core.utils.hideKeyboardFrom
@@ -37,8 +38,6 @@ import com.luisansal.jetpack.data.preferences.UserSharedPreferences
 import com.luisansal.jetpack.databinding.FragmentMapsBinding
 import com.luisansal.jetpack.domain.entity.Place
 import com.luisansal.jetpack.domain.entity.VisitEntity
-import com.luisansal.jetpack.domain.model.maps.toGLatLng
-import com.luisansal.jetpack.domain.model.maps.toLatLng
 import com.luisansal.jetpack.domain.network.ApiService
 import com.luisansal.jetpack.domain.network.ApiService.Companion.PUSHER_API_KEY
 import com.luisansal.jetpack.features.TempData
@@ -57,24 +56,20 @@ import org.json.JSONObject
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class MapsFragment : BaseBindingFragment(), OnMapReadyCallback {
+class MapsFirebaseFragment : BaseBindingFragment(), OnMapReadyCallback {
 
     companion object {
-        private val TAG = MapsFragment::class.java.name
+        private val TAG = MapsFirebaseFragment::class.java.name
         private const val DEFAULT_ZOOM = 18f
         const val PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1
-        const val CHANNEL_ID = "MAPS _GLOBAL_ANDROID"
         const val MARKER_ON_MAP_ID = "-1"
         const val MARKER_ON_MAP_NO_RESULTS_ID = "-2"
         const val LOCATION_ORIGIN = "LOCATION_ORIGIN"
         const val LOCATION_DESTINATION = "LOCATION_DESTINATION"
-        fun newInstance(): MapsFragment {
-            return MapsFragment()
-        }
     }
 
     private val binding by lazy {
-        FragmentMapsBinding.inflate(layoutInflater).apply { lifecycleOwner = this@MapsFragment }
+        FragmentMapsBinding.inflate(layoutInflater).apply { lifecycleOwner = this@MapsFirebaseFragment }
     }
 
     private val mViewModel: MapsViewModel by injectFragment()
@@ -97,7 +92,6 @@ class MapsFragment : BaseBindingFragment(), OnMapReadyCallback {
     private var lastUserMarker: Marker? = null
     private var lastOtherMarker: Marker? = null
     private var polyline: Polyline? = null
-    private val authSharedPreferences: AuthSharedPreferences by injectFragment()
     private val mapsViewModel by viewModel<MapsViewModel>()
     private val markerOptions by lazy {
         MarkerOptions().icon(ContextCompat.getDrawable(requireContext(), R.drawable.ic_jetpack_marker).bitmapDescriptorFromVector())
@@ -105,19 +99,7 @@ class MapsFragment : BaseBindingFragment(), OnMapReadyCallback {
     private val markerOptionsCocheEcologico by lazy {
         MarkerOptions().icon(ContextCompat.getDrawable(requireContext(), R.drawable.ic_coche_ecologico).bitmapDescriptorFromVector())
     }
-    private val pusher by lazy {
-        val options = PusherOptions()
-        options.setCluster(ApiService.PUSHER_API_CLUSTER)
 
-        val authorizer = HttpAuthorizer(ApiService.BROADCAST_URL)
-        val headers = HashMap<String, String>()
-        val token = authSharedPreferences.token
-        headers.put("Authorization", "Bearer $token")
-        authorizer.setHeaders(headers)
-        options.authorizer = authorizer
-        options.isUseTLS = true
-        Pusher(PUSHER_API_KEY, options)
-    }
     private val autoCompleteAdapter1 by lazy { PlaceAdapter(requireContext()) }
     private val autoCompleteAdapter2 by lazy { PlaceAdapter(requireContext()) }
     override fun getViewResource() = binding.root
@@ -185,65 +167,18 @@ class MapsFragment : BaseBindingFragment(), OnMapReadyCallback {
     }
 
     private fun initBroadcast() {
-        pusher.connect(object : ConnectionEventListener {
-            override fun onConnectionStateChange(change: ConnectionStateChange) {
-                Log.i("Pusher", "State changed from ${change.previousState} to ${change.currentState}")
-                if (change.currentState == ConnectionState.CONNECTED) {
-                    val socketId = pusher.connection.socketId
-                    authSharedPreferences.socketId = socketId
-                }
-            }
-
-            override fun onError(message: String, code: String?, e: Exception?) {
-                Log.i("Pusher", "There was a problem connecting! code ($code), message ($message), exception($e)")
-            }
-        }, ConnectionState.ALL)
 
         try {
-            val channel = pusher.subscribePrivate("private-maps")
-            channel.bind("App\\Events\\MapTrackingEvent", object : PrivateChannelEventListener {
-                override fun onEvent(event: PusherEvent?) {
-                    Log.i("event", "$event")
-                    requireActivity().runOnUiThread {
-                        val user = userSharedPreferences.userEntity
-                        val json = JSONObject(event?.data ?: "")
-                        val latitude = json.getDouble("latitude")
-                        val longitude = json.getDouble("longitude")
-                        val message = json.getString("message")
-
-                        lastOtherMarker?.remove()
-                        lastOtherMarker = mGoogleMap?.addMarker(
-                            markerOptionsCocheEcologico.position(LatLng(latitude, longitude))
-                                .title("User: " + user?.names)
-                        )
-                        Toast.makeText(activity, "onMessage: ${message} ${latitude}-${longitude} ", Toast.LENGTH_LONG).show()
-                    }
-                }
-
-                override fun onAuthenticationFailure(message: String?, e: java.lang.Exception?) {
-                    Log.i("message", "$message")
-                }
-
-                override fun onSubscriptionSucceeded(channelName: String?) {
-                    Log.i("channelName", "$channelName")
-
-                }
-            })
+            mViewModel.getPositionsFirebase()
         } catch (e: java.lang.Exception) {
             Log.i("subscribed", "$e")
         }
     }
 
-    fun sendRealTracking(name: String?, location: Location?) {
-        mapsViewModel.sendPosition(
-            "hola soy ${userSharedPreferences.userEntity?.names} y estoy enviandote un mensaje",
+    fun sendRealTracking(location: Location?) {
+        mapsViewModel.sendPositionFirebase(
             location?.latitude ?: 0.0, location?.longitude ?: 0.0
         )
-    }
-
-    internal class WebSocketModel(json: String) : JSONObject(json) {
-        val message: String = this.optString("message")
-        val description: String = this.optString("description")
     }
 
     override fun onMapReady(googleMap: GoogleMap) {
@@ -262,7 +197,7 @@ class MapsFragment : BaseBindingFragment(), OnMapReadyCallback {
         onACBuscarLugares2TextChanged()
         onClickBtnCurrentLocation()
         //onClickMap()
-        //initTracking()
+        initTracking()
     }
 
     private fun initTracking() {
@@ -274,8 +209,8 @@ class MapsFragment : BaseBindingFragment(), OnMapReadyCallback {
         if (locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
             locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0L, 0F, object : LocationListener {
                 override fun onLocationChanged(location: Location) {
-                    this@MapsFragment.onLocationChanged(location)
-                    sendRealTracking(userSharedPreferences.userEntity?.names, location)
+                    this@MapsFirebaseFragment.onLocationChanged(location)
+                    sendRealTracking(location)
                 }
 
                 override fun onStatusChanged(p0: String?, p1: Int, p2: Bundle?) = Unit
@@ -285,8 +220,8 @@ class MapsFragment : BaseBindingFragment(), OnMapReadyCallback {
         } else if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
             locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0L, 0F, object : LocationListener {
                 override fun onLocationChanged(location: Location) {
-                    this@MapsFragment.onLocationChanged(location)
-                    sendRealTracking(userSharedPreferences.userEntity?.names, location)
+                    this@MapsFirebaseFragment.onLocationChanged(location)
+                    sendRealTracking(location)
                 }
 
                 override fun onStatusChanged(p0: String?, p1: Int, p2: Bundle?) = Unit
@@ -333,7 +268,7 @@ class MapsFragment : BaseBindingFragment(), OnMapReadyCallback {
             mGoogleMap?.clear()
             lastUserMarker = mGoogleMap?.addMarker(markerOptions.position(location).title("User: " + UserViewModel.userEntity?.names))
 
-            val visit = VisitEntity(location = location.toLatLng())
+            val visit = VisitEntity(location = com.luisansal.jetpack.domain.model.maps.LatLng(location.latitude, location.longitude))
             UserViewModel.userEntity?.id?.let { mViewModel.saveOneVisitForUser(visit, it) }
         }
     }
@@ -358,8 +293,11 @@ class MapsFragment : BaseBindingFragment(), OnMapReadyCallback {
                 val response = mapsViewState.data
                 if (response != null)
                     for (visit in response.visitEntities) {
-                        mGoogleMap?.addMarker(markerOptions.position(visit.location.toGLatLng()).title("User: " + response.userEntity?.names))
-                        mGoogleMap?.moveCamera(CameraUpdateFactory.newLatLngZoom(visit.location.toGLatLng(), 5f))
+                        mGoogleMap?.addMarker(
+                            markerOptionsCocheEcologico.position(LatLng(visit.location.latitude, visit.location.longitude))
+                                .title("User: " + response.userEntity?.names)
+                        )
+//                        mGoogleMap?.moveCamera(CameraUpdateFactory.newLatLngZoom(LatLng(visit.location.latitude, visit.location.longitude), 5f))
                     }
             }
             else -> Unit
@@ -505,11 +443,6 @@ class MapsFragment : BaseBindingFragment(), OnMapReadyCallback {
             override fun onLocationResult(locationResult: LocationResult?) = Unit
         }
         mFusedLocationProviderClient.requestLocationUpdates(mLocationRequest, mLocationCallback, null)
-    }
-
-    override fun onStop() {
-        super.onStop()
-        pusher.disconnect()
     }
 
     override fun onResume() {

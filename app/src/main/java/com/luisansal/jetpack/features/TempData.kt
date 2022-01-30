@@ -1,7 +1,7 @@
 package com.luisansal.jetpack.features
 
 import com.google.android.gms.maps.model.LatLng
-import com.luisansal.jetpack.core.domain.entity.User
+import com.luisansal.jetpack.core.domain.entity.UserEntity
 
 object TempData {
     var numberDNI: String = "70668281"
@@ -19,5 +19,5 @@ object TempData {
 
     var lastLocation : String = ""
 
-    val user = User(id = 1, names = "Luis", lastNames = "Sánchez")
+    val user = UserEntity(id = "-", names = "Luis", lastNames = "Sánchez")
 }

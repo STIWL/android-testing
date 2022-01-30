@@ -11,10 +11,10 @@ import androidx.navigation.NavController
 import com.luisansal.jetpack.R
 import com.luisansal.jetpack.common.interfaces.ActionsViewPagerListener
 import com.luisansal.jetpack.common.interfaces.TitleListener
-import com.luisansal.jetpack.core.domain.entity.User
+import com.luisansal.jetpack.core.domain.entity.UserEntity
 import com.luisansal.jetpack.core.utils.navigationController
 
-class RoomFragment : Fragment(), TitleListener, CrudListener<User>, RoomFragmentMVP.View {
+class RoomFragment : Fragment(), TitleListener, CrudListener<UserEntity>, RoomFragmentMVP.View {
 
     override val title = "Room Manager"
     private var mActionsViewPagerListener: ActionsViewPagerListener? = null
@@ -67,7 +67,7 @@ class RoomFragment : Fragment(), TitleListener, CrudListener<User>, RoomFragment
         //TODO()
     }
 
-    override fun setOBjects(oBjects: List<User>) {
+    override fun setOBjects(oBjects: List<UserEntity>) {
         //TODO()
     }
 

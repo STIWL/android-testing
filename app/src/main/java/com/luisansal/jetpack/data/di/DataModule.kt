@@ -1,7 +1,12 @@
 package com.luisansal.jetpack.data.di
 
 import android.content.Context
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ktx.database
+import com.google.firebase.ktx.Firebase
 import com.luisansal.jetpack.core.data.preferences.AuthSharedPreferences
+import com.luisansal.jetpack.core.utils.getEncryptedSharedPreferences
 import com.luisansal.jetpack.core.utils.listByElementsOf
 import com.luisansal.jetpack.data.database.BaseRoomDatabase
 import com.luisansal.jetpack.data.datastore.*
@@ -16,6 +21,7 @@ import com.luisansal.jetpack.domain.network.DirectionsApiService
 import com.luisansal.jetpack.domain.network.PlacesApiService
 import com.luisansal.jetpack.domain.repository.FirebaseAnalyticsRepository
 import org.koin.core.module.Module
+import org.koin.core.qualifier.named
 import org.koin.dsl.module
 
 val preferencesModule = module {
@@ -26,19 +32,24 @@ val preferencesModule = module {
 }
 
 private val Context.userPreferences
-    get() = getSharedPreferences(UserSharedPreferences.PREFERENCES_NAME, Context.MODE_PRIVATE)
+    get() = getEncryptedSharedPreferences(UserSharedPreferences.PREFERENCES_NAME)
 
 private val Context.authPreferences
-    get() = getSharedPreferences(AuthSharedPreferences.PREFERENCES_NAME, Context.MODE_PRIVATE)
+    get() = getEncryptedSharedPreferences(AuthSharedPreferences.PREFERENCES_NAME)
 
 private val Context.syncPreferences
-    get() = getSharedPreferences(SyncSharedPreferences.PREFERENCES_NAME, Context.MODE_PRIVATE)
+    get() = getEncryptedSharedPreferences(SyncSharedPreferences.PREFERENCES_NAME)
 
 private val Context.configPreferences
-    get() = getSharedPreferences(ConfigSharedPreferences.PREFERENCES_NAME, Context.MODE_PRIVATE)
+    get() = getEncryptedSharedPreferences(ConfigSharedPreferences.PREFERENCES_NAME)
 
+const val USERS_REF = "users"
+const val MARKERS_REF = "markers"
 val databaseModule = module {
     single { BaseRoomDatabase.getDatabase(get()) }
+    single { Firebase.database }
+    single(named(USERS_REF)) { get<FirebaseDatabase>().getReference(USERS_REF) }
+    single(named(MARKERS_REF)) { get<FirebaseDatabase>().getReference(MARKERS_REF) }
 }
 
 val networkModule = module {

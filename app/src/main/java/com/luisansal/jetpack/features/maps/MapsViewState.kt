@@ -1,5 +1,6 @@
 package com.luisansal.jetpack.features.maps
 
+import com.luisansal.jetpack.domain.entity.VisitEntity
 import com.luisansal.jetpack.features.maps.model.MarkerUserVisitMapModel
 
 sealed class MapsViewState  {

@@ -14,7 +14,7 @@ data class LoginResponse(
 ) {
     data class UserResponse(
             @SerializedName("id")
-            val id: Long,
+            val id: String,
             @SerializedName("names")
             val names: String,
             @SerializedName("lastnames")

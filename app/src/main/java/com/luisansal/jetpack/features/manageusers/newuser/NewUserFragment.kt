@@ -7,7 +7,7 @@ import android.widget.Toast
 import androidx.navigation.NavController
 import com.luisansal.jetpack.R
 import com.luisansal.jetpack.core.base.BaseBindingFragment
-import com.luisansal.jetpack.core.domain.entity.User
+import com.luisansal.jetpack.core.domain.entity.UserEntity
 import com.luisansal.jetpack.core.domain.exceptions.CreateUserValidationException
 import com.luisansal.jetpack.core.domain.exceptions.DniValidationException
 import com.luisansal.jetpack.core.domain.exceptions.UserExistException
@@ -17,7 +17,6 @@ import com.luisansal.jetpack.features.analytics.FirebaseanalyticsViewModel
 import com.luisansal.jetpack.features.analytics.FirebaseanalyticsViewState
 import com.luisansal.jetpack.features.manageusers.UserViewState
 import com.luisansal.jetpack.features.manageusers.viewmodel.UserViewModel
-import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
@@ -68,14 +67,14 @@ class NewUserFragment : BaseBindingFragment() {
             it ?: return@observe
             when (it) {
                 is UserViewState.GetUserSuccessState -> {
-                    val user = it.user
+                    val user = it.userEntity
                     if (user != null) {
                         notifyUserSaved(user)
-                        newUserViewModel.fillFields(it.user)
+                        newUserViewModel.fillFields(it.userEntity)
                     }
                 }
                 is UserViewState.NewUserSuccess -> {
-                    val user = it.user
+                    val user = it.userEntity
                     if (user != null) {
                         notifyUserSaved(user)
                     }
@@ -91,8 +90,8 @@ class NewUserFragment : BaseBindingFragment() {
                     notifyUserValidationConstraint()
                 }
                 is UserExistException -> {
-                    notifyUserSaved(e.user)
-                    nextStep(e.user)
+                    notifyUserSaved(e.userEntity)
+                    nextStep(e.userEntity)
                 }
             }
         })
@@ -104,8 +103,8 @@ class NewUserFragment : BaseBindingFragment() {
         firebaseanalyticsViewModel.fireBaseAnalyticsViewState.observe(::getLifecycle, ::observerFirebaseCrearUsuario)
     }
 
-    private fun nextStep(user: User) {
-        UserViewModel.user = user
+    private fun nextStep(userEntity: UserEntity) {
+        UserViewModel.userEntity = userEntity
         navController.navigate(R.id.action_newUserFragment_to_listUserFragment)
     }
 
@@ -117,8 +116,8 @@ class NewUserFragment : BaseBindingFragment() {
         }
     }
 
-    private fun notifyUserSaved(user: User) {
-        Toast.makeText(context, StringBuilder().append(user.names).append(" ").append(user.lastNames).toString(), Toast.LENGTH_LONG).show()
+    private fun notifyUserSaved(userEntity: UserEntity) {
+        Toast.makeText(context, StringBuilder().append(userEntity.names).append(" ").append(userEntity.lastNames).toString(), Toast.LENGTH_LONG).show()
     }
 
 }

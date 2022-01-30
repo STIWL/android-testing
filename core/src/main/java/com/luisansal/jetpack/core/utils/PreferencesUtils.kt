@@ -1,6 +1,9 @@
 package com.luisansal.jetpack.core.utils
 
+import android.content.Context
 import android.content.SharedPreferences
+import androidx.security.crypto.EncryptedSharedPreferences
+import androidx.security.crypto.MasterKey
 
 
 fun SharedPreferences.getString(key: String): String? {
@@ -25,4 +28,19 @@ fun SharedPreferences.getLong(key: String): Long {
 
 fun SharedPreferences.putLong(key: String, value: Long) {
     edit().putLong(key, value).apply()
+}
+
+fun Context.getEncryptedSharedPreferences(name: String): SharedPreferences {
+    val mainKey = MasterKey.Builder(this)
+        .setKeyScheme(MasterKey.KeyScheme.AES256_GCM)
+        .build()
+
+    val sharedPrefsFile: String = name
+    return EncryptedSharedPreferences.create(
+        this,
+        sharedPrefsFile,
+        mainKey,
+        EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
+        EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
+    )
 }

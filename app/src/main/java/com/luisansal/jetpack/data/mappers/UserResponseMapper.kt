@@ -1,10 +1,10 @@
 package com.luisansal.jetpack.data.mappers
 
 import com.luisansal.jetpack.data.network.response.LoginResponse
-import com.luisansal.jetpack.core.domain.entity.User
+import com.luisansal.jetpack.core.domain.entity.UserEntity
 
 class UserResponseMapper {
-    fun map(userRresponse : LoginResponse.UserResponse) = User(
+    fun map(userRresponse : LoginResponse.UserResponse) = UserEntity(
             id = userRresponse.id,
             names = userRresponse.names,
             lastNames = userRresponse.lastNames,

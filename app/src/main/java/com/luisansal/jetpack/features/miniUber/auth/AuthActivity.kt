@@ -11,9 +11,5 @@ class AuthActivity : BaseBindingActivity() {
         ActivityMiniuberAuthBinding.inflate(layoutInflater).apply { lifecycleOwner = this@AuthActivity }
     }
 
-    private val navController by lazy {
-        Navigation.findNavController(this, R.id.auth_nav_host_fragment)
-    }
-
     override fun getViewResource() = binding.root
 }

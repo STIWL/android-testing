@@ -1,7 +1,7 @@
 package com.luisansal.jetpack.features.manageusers
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import com.luisansal.jetpack.core.domain.entity.User
+import com.luisansal.jetpack.core.domain.entity.UserEntity
 import com.luisansal.jetpack.domain.usecases.UserUseCase
 import io.mockk.every
 import io.mockk.mockk
@@ -25,13 +25,13 @@ class ManageUsersPresenterTest {
         newUserPresenter = NewUserPresenter(mView, userUseCase)
     }
 
-    fun getMockedUser(): User {
-        val user: User = mockkClass(User::class)
-        every { user.id } returns 1
-        every { user.dni } returns "15258968"
-        every { user.name } returns "Pepito"
-        every { user.lastName } returns "Rodriguez"
-        return user
+    fun getMockedUser(): UserEntity {
+        val userEntity: UserEntity = mockkClass(UserEntity::class)
+        every { userEntity.id } returns 1
+        every { userEntity.dni } returns "15258968"
+        every { userEntity.name } returns "Pepito"
+        every { userEntity.lastName } returns "Rodriguez"
+        return userEntity
     }
 
     @Test

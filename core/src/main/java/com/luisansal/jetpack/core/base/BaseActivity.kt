@@ -36,7 +36,7 @@ abstract class BaseActivity : AppCompatActivity() {
         alertMessage(getString(message))
     }
 
-    open fun alertMessage(message: String, textBtn: String = String.EMPTY, onClickOk: (() -> Unit)? = null) {
+    open fun alertMessage(message: String, textBtn: String = getString(R.string.accept), onClickOk: (() -> Unit)? = null) {
         AlertDialogFragment.newInstance(
             subtitle = message,
             btnOkText = textBtn,

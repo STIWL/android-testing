@@ -5,7 +5,7 @@ import com.luisansal.jetpack.data.mappers.UserResponseMapper
 import com.luisansal.jetpack.data.network.request.LoginRequest
 import com.luisansal.jetpack.core.data.preferences.AuthSharedPreferences
 import com.luisansal.jetpack.data.preferences.UserSharedPreferences
-import com.luisansal.jetpack.core.domain.entity.User
+import com.luisansal.jetpack.core.domain.entity.UserEntity
 import com.luisansal.jetpack.domain.network.ApiService
 import com.luisansal.jetpack.core.utils.apiService
 import java.util.*
@@ -15,7 +15,7 @@ class AuthCloudStore(
     private val userSharedPreferences: UserSharedPreferences
 ) {
 
-    suspend fun login(email: String, password: String): Result<User> {
+    suspend fun login(email: String, password: String): Result<UserEntity> {
         return apiService {
             val loginRequest = LoginRequest(email, password)
             val response = apiService.login(loginRequest)
@@ -27,13 +27,15 @@ class AuthCloudStore(
                     authSharedPreferences.token = body.accessToken
                     authSharedPreferences.tokenType = body.tokenType
                     authSharedPreferences.tokenExpires = Calendar.getInstance().timeInMillis + body.expiresIn
-                    userSharedPreferences.user = user
+                    userSharedPreferences.userEntity = user
                 }
             }
         }
     }
 
     suspend fun logout(): Result<Boolean> {
+        userSharedPreferences.clear()
+        authSharedPreferences.clear()
         return apiService {
             val logoutResponse = apiService.logout()
             val body = logoutResponse.body()

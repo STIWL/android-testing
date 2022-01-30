@@ -2,7 +2,7 @@ package com.luisansal.jetpack.features.manageusers
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.luisansal.jetpack.data.repository.UserRepository
-import com.luisansal.jetpack.core.domain.entity.User
+import com.luisansal.jetpack.core.domain.entity.UserEntity
 import com.luisansal.jetpack.domain.usecases.UserUseCase
 import io.mockk.*
 import kotlinx.coroutines.runBlocking
@@ -10,7 +10,7 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 
-class ManageUsersUserCaseTest {
+class ManageUsersUserDaoCaseTest {
 
     @get:Rule
     val rule = InstantTaskExecutorRule()
@@ -65,12 +65,12 @@ class ManageUsersUserCaseTest {
     fun `lista de usuarios`() = runBlocking {
         val users = UsersMockDataHelper().getUsers()
 
-        every { userRepository.allUsers } returns users
+        every { userRepository.allUserEntities } returns users
 
         userUseCase.getAllUser()
 
         coVerify {
-            userRepository.allUsers
+            userRepository.allUserEntities
         }
     }
 
@@ -88,12 +88,12 @@ class ManageUsersUserCaseTest {
 
     }
 
-    fun getMockedUser(): User {
-        val user: User = mockkClass(User::class)
-        every { user.id } returns 1
-        every { user.dni } returns "1525896"
-        every { user.name } returns "Pepito"
-        every { user.lastName } returns "Rodriguez"
-        return user
+    fun getMockedUser(): UserEntity {
+        val userEntity: UserEntity = mockkClass(UserEntity::class)
+        every { userEntity.id } returns 1
+        every { userEntity.dni } returns "1525896"
+        every { userEntity.name } returns "Pepito"
+        every { userEntity.lastName } returns "Rodriguez"
+        return userEntity
     }
 }

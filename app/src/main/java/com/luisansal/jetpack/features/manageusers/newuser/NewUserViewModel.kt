@@ -2,7 +2,7 @@ package com.luisansal.jetpack.features.manageusers.newuser
 
 import androidx.lifecycle.MutableLiveData
 import com.luisansal.jetpack.core.base.BaseViewModel
-import com.luisansal.jetpack.core.domain.entity.User
+import com.luisansal.jetpack.core.domain.entity.UserEntity
 import com.luisansal.jetpack.core.utils.EMPTY
 import com.luisansal.jetpack.core.utils.INVALID_INPUT_COLOR
 import com.luisansal.jetpack.core.utils.NORMAL_INPUT_COLOR
@@ -21,7 +21,7 @@ class NewUserViewModel(
 
     fun onClickSiguiente() {
         if (validateDni()) {
-            val user = User()
+            val user = UserEntity()
             user.names = names.value ?: String.EMPTY
             user.lastNames = lastnames.value ?: String.EMPTY
             user.dni = dni.value ?: String.EMPTY
@@ -59,11 +59,11 @@ class NewUserViewModel(
         userViewModel.getUser(dni.value ?: EMPTY)
     }
 
-    fun fillFields(user: User?) {
-        user?.also {
-            dni.postValue(user.dni)
-            names.postValue(user.names)
-            lastnames.postValue(user.lastNames)
+    fun fillFields(userEntity: UserEntity?) {
+        userEntity?.also {
+            dni.postValue(userEntity.dni)
+            names.postValue(userEntity.names)
+            lastnames.postValue(userEntity.lastNames)
         }
     }
 }
